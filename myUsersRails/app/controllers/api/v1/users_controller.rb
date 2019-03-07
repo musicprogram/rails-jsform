@@ -12,6 +12,19 @@ module Api::V1
 
     def show
       @user = User.find(params[:id])
+ 
+      if stale?(last_modified: @user.updated_at) # muy importante
+        render json: @user
+      end
+    end
+
+    def destroy #destruir 
+      @user = User.find(params[:id])
+      if @user.destroy
+        head :no_content, status: :ok
+      else
+         render json: @user.errors, status: :unprocessable_entity
+      end
     end
 
     private
