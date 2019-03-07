@@ -7,5 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-User.create(name: 'usuario uno')
-User.create(name: 'usuario dos')
+20.times do 
+	User.create(name: Faker::Name.name )
+end
+
+

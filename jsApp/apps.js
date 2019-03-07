@@ -67,9 +67,14 @@ function agregandoUser(username,userid){
 function itemUser(username,userid){
 	return  `
 					<div class="alert alert-secondary" role="alert" id="${userid}">
-					  ${username}
-					  <a class="btn btn-danger" name="delete">destroy<a/>
-					  <a class="btn btn-info" name="editar">edit<a/>
+						 <p>
+							 	${username}
+							 	<a class="btn btn-dark text-info float-right" name="delete">destroy<a/>
+						 </p>
+			
+							
+
+							
 					</div>
 				`
 }
@@ -90,12 +95,12 @@ function eliminarUser(target){
 	// console.log(target)
 	if(target.name === 'delete'){
 		// remover vista
-		target.parentElement.remove()
+		target.parentElement.parentElement.remove()
 		/////
-		console.log(target.parentElement.id); //identificar id de cada objeto en el div principal
+		console.log(target.parentElement.parentElement.id); //identificar id de cada objeto en el div principal
 		
 		//////// remover de rails 
-		fetch(`${urlJson}/${target.parentElement.id}`, { 
+		fetch(`${urlJson}/${target.parentElement.parentElement.id}`, { 
 		  method: 'DELETE' 
 		});
 		//// eliminar funciona ///////// 
@@ -111,39 +116,47 @@ function eliminarUser(target){
 ////////////////////////editar y actualizar
 
 
-listaUsuarios.addEventListener("click", seleccionarEditar)
+// listaUsuarios.addEventListener("click", seleccionarEditar)
 
-function seleccionarEditar(e){
-	  console.log(e.target);
-	  actualizarUser(e.target)
-}
+// function seleccionarEditar(e){
+// 	  // console.log(e.target.parentElement.id);
+// 	  // actualizarUser(e.target);
 
-function actualizarUser(target){
-	// console.log(target)
-	if(target.name === 'editar'){
+// 	  form.innerHTML = formularioVista('formEdit'); // clase del formulario edit, de cada un objeto
+
+// 	  console.log(name.value) //input agregar el valor al input
+
+// }
+
+// function actualizarUser(target){
+// 	// console.log(target)
+// 	if(target.name === 'editar'){
 		
-		/////
-		console.log(target.parentElement.id); //identificar id de cada objeto en el div principal
+// 		/////
+// 		console.log(target.parentElement.id); //identificar id de cada objeto en el div principal
 		
-		//////// remover de rails 
+// 		//////// remover de rails 
 		
-		//// 
-	}
-}
+// 		//// 
+// 	}
+// }
 
 
 
-///////////////////  formulario vista 
+/////////////////  formulario vista 
 
-function formularioVista(){
+function formularioVista(editar){
+	console.log(editar)
 	return `
-		<form id="userForm">
+		<form id="${(editar !== undefined) ? 'formEdit' : 'userForm'}">
 			<div class="form-group">
-				<input type="text" placeholder="name" id="name" class="form-control">
+				<input type="text" placeholder="name" id="name" class="form-control" required>
 			</div>
 			<div class="form-group">
-				<input type="submit" value="click" class="btn btn-info btn-block">
+				<input type="submit" value="${(editar !== undefined) ? 'Edit' : 'save'}" class="btn btn-info btn-block">
 			</div>
 		</form>	
 	`
 }
+
+
