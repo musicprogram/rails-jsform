@@ -7,6 +7,11 @@ const listaUsuarios = document.querySelector("#listaUsuarios");
 const userForm = document.querySelector("#userForm");
 const name = document.querySelector("#name");
 
+const formEdit = document.querySelector("#formEdit");
+const nameEdit = document.querySelector("#nameEdit");
+const userFormEdit = document.querySelector("#userFormEdit")
+
+
 let urlJson = 'http://localhost:3000/api/v1/users'
 
 fetch(urlJson)
@@ -69,7 +74,8 @@ function itemUser(username,userid){
 					<div class="alert alert-secondary" role="alert" id="${userid}">
 						 <p>
 							 	${username}
-							 	<a class="btn btn-dark text-info float-right" name="delete">destroy<a/>
+							 	<a class="btn btn-dark text-info float-right mr-2" name="delete">destroy<a/>
+							 	<a class="btn btn-info text-dark float-right mr-2" name="edit">edit<a/>
 						 </p>
 			
 							
@@ -116,17 +122,30 @@ function eliminarUser(target){
 ////////////////////////editar y actualizar
 
 
-// listaUsuarios.addEventListener("click", seleccionarEditar)
+listaUsuarios.addEventListener("click", seleccionarEditar)
 
-// function seleccionarEditar(e){
-// 	  // console.log(e.target.parentElement.id);
-// 	  // actualizarUser(e.target);
+function seleccionarEditar(e){
+	 
+	  let idUser = e.target.parentElement.parentElement.id; // id del div del objeto
 
-// 	  form.innerHTML = formularioVista('formEdit'); // clase del formulario edit, de cada un objeto
+	  //console.log(idUser); // id del div del objeto
+	  let useFormName;
+	  fetch(`${urlJson}/${idUser}`) // traigo el objeto para ponerlo en el formulario
+	  	.then(function(response){
+				return response.json();
+			})
+			.then(function(user){
+				// console.log(users);
+				useFormName = user.name 
+				formEdit.innerHTML = formularioVista('userFormEdit',useFormName); // clase del formulario edit, de cada un objeto
+				console.log(formEdit.childNodes[3])
+			})// trayenfo el objeto 
+	 
 
-// 	  console.log(name.value) //input agregar el valor al input
+}
 
-// }
+
+
 
 // function actualizarUser(target){
 // 	// console.log(target)
@@ -145,12 +164,14 @@ function eliminarUser(target){
 
 /////////////////  formulario vista 
 
-function formularioVista(editar){
-	console.log(editar)
+function formularioVista(editar,useFormName){
+	//console.log(editar)
 	return `
-		<form id="${(editar !== undefined) ? 'formEdit' : 'userForm'}">
+		<h3>${(editar !== undefined) ? 'Editar' : 'Agregar'}</h3>
+		<form id="${(editar !== undefined) ? 'userFormEdit' : 'userForm'}">
 			<div class="form-group">
-				<input type="text" placeholder="name" id="name" class="form-control" required>
+			<label>Nombre</label>
+				<input type="text" value="${(editar !== undefined) ? (useFormName) : 'Agregar'}" id="${(editar !== undefined) ? 'nameEdit' : 'name'}" class="form-control" required>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="${(editar !== undefined) ? 'Edit' : 'save'}" class="btn btn-info btn-block">
